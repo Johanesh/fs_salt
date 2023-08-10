@@ -12,14 +12,6 @@ export class AppController {
   }
 }
 
-@Controller('contact')
-export class ContactsController {
-  @Get()
-  findAll(): string {
-    return 'This action returns all contact';
-  }
-}
-
 @Controller('contact/group')
 export class ContactGroupsController {
   @Get()

@@ -26,7 +26,6 @@ model Contact {
   createdAt DateTime
   updatedAt DateTime
   lastActivityAt DateTime
-  workspaceId String
   name String
   phoneNumber String
   email String
