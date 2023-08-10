@@ -33,10 +33,14 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/prisma/migrations
+/prisma/*.db
+/prisma/*.db-journal
 
 # System Files
 .DS_Store
 Thumbs.db
+.env
 
 # Next.js
 .next
