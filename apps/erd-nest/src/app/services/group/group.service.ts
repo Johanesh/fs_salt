@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, ContactGroup } from '@prisma/client';
 
 @Injectable()
-export class ContactGroupService {
+export class GroupService {
   constructor(private prisma: PrismaService) {}
 
   async getAll(): Promise<ContactGroup[]> {
@@ -13,6 +13,9 @@ export class ContactGroupService {
   async getDetail(id: Prisma.ContactGroupWhereUniqueInput): Promise<ContactGroup | null> {
     return await this.prisma.contactGroup.findUnique({
         where: id,
+        include: {
+            ContactList: true,
+        },
       })
   }
 

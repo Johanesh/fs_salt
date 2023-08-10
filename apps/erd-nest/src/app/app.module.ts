@@ -5,21 +5,21 @@ import { UserService } from './services/user/user.service';
 import { PrismaService } from './services/prisma/prisma.service';
 import { ContactService } from './services/contact/contact.service';
 import { ContactsController } from './controllers/contact/contact.controller';
-import { ContactGroupController } from './controllers/contactGroup/contactGroup.controller';
-import { ContactGroupService } from './services/contactGroup/contactGroup.service';
+import { GroupController } from './controllers/group/group.controller';
+import { GroupService } from './services/group/group.service';
 
 @Module({
   imports: [],
   controllers: [
     UsersController,
     ContactsController,
-    ContactGroupController
+    GroupController
   ],
   providers: [
     PrismaService,
     UserService,
     ContactService,
-    ContactGroupService
+    GroupService
   ],
 })
 export class AppModule {}

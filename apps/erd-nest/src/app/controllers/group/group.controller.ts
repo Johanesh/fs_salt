@@ -1,22 +1,22 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ContactGroup as ContactGroupModel } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
-import { ContactGroupService } from '../../services/contactGroup/contactGroup.service';
+import { GroupService } from '../../services/group/group.service';
 
 @Controller('group')
-export class ContactGroupController {
+export class GroupController {
   constructor(
-    private readonly contactGroupService: ContactGroupService,
+    private readonly groupService: GroupService,
   ) {}
 
   @Get("/")
   getData() {
-    return this.contactGroupService.getAll();
+    return this.groupService.getAll();
   }
 
   @Get("/:id")
   async getContact(@Param('id') id: string): Promise<ContactGroupModel> {
-    return this.contactGroupService.getDetail({ id });
+    return this.groupService.getDetail({ id });
   }
 
   @Post("/")
@@ -32,7 +32,7 @@ export class ContactGroupController {
       updatedAt: new Date(),
       ...data
     }
-    return this.contactGroupService.create(contactGroupData);
+    return this.groupService.create(contactGroupData);
   }
 
   @Put("/:id")
@@ -43,12 +43,12 @@ export class ContactGroupController {
         description: string;
     }
   ): Promise<ContactGroupModel> {
-    let contact = await this.contactGroupService.getDetail({ id })
+    let contact = await this.groupService.getDetail({ id })
     if (contact) {
       let contactGroupData = {...contact, ...data};
       contactGroupData.updatedAt = new Date();
 
-      return this.contactGroupService.update({
+      return this.groupService.update({
         where: { id },
         data: contactGroupData
       });
@@ -57,6 +57,6 @@ export class ContactGroupController {
 
   @Delete("/:id")
   async delete(@Param('id') id: string): Promise<ContactGroupModel> {
-    return this.contactGroupService.delete({ id });
+    return this.groupService.delete({ id });
   }
 }
