@@ -1,41 +1,67 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { User as UserModel } from '@prisma/client';
+import { v4 as uuidv4 } from 'uuid';
+import { UserService } from '../../services/user/user.service';
 
 @Controller('user')
 export class UsersController {
-  @Get()
-  findAll(): string {
-    return 'This action returns all users';
-  }
-}
+  constructor(
+    private readonly userService: UserService,
+  ) {}
 
-@Controller('user/:id')
-export class UserDetailController {
-  @Get()
-  findAll(@Param() params: { id: string }): string {
-    return `This action returns insert single data ${params.id}`;
+  @Get("/")
+  getData() {
+    return this.userService.getAll();
   }
-}
 
-@Controller('user/insert')
-export class UserInsertController {
-  @Get()
-  findAll(): string {
-    return 'This action returns insert user';
+  @Get("/:id")
+  async getUser(@Param('id') id: string): Promise<UserModel> {
+    return this.userService.getDetail({ id });
   }
-}
 
-@Controller('user/update/:id')
-export class UserUpdateController {
-  @Get()
-  findAll(@Param() params: { id: string }): string {
-    return `This action returns update user ${params.id}`;
+  @Post("/")
+  async create(
+    @Body() data: {
+      email: string;
+      name: string;
+      password: string;
+    }
+  ): Promise<UserModel> {
+    let userData: UserModel = {
+      id: uuidv4() as string,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastActivityAt: new Date(),
+      emailVerified: new Date(),
+      ...data
+    }
+    return this.userService.create(userData);
   }
-}
 
-@Controller('user/delete/:id')
-export class UserDeleteController {
-  @Get()
-  findAll(@Param() params: { id: string }): string {
-    return `This action returns delete user ${params.id}`;
+  @Put("/:id")
+  async update(
+    @Param('id') id: string,
+    @Body() data: {
+      email: string;
+      name: string;
+      password: string;
+    }
+  ): Promise<UserModel> {
+    let user = await this.userService.getDetail({ id })
+    if (user) {
+      let userData = {...user, ...data};
+      userData.updatedAt = new Date();
+      userData.lastActivityAt = new Date();
+
+      return this.userService.update({
+        where: { id },
+        data: userData
+      });
+    }
+  }
+
+  @Delete("/:id")
+  async delete(@Param('id') id: string): Promise<UserModel> {
+    return this.userService.delete({ id });
   }
 }
